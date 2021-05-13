@@ -27,7 +27,7 @@ UEFILIB_CFLAGS := \
 
 TINYVISOR_CFLAGS := \
 	$(UEFILIB_CFLAGS) \
-    -Iuefi/inc
+    -Iuefi
 
 TINYVISOR_LDFLAGS := \
 	-target x86_64-unknown-windows \
@@ -58,17 +58,17 @@ bin/tinyvisor.efi: $(TINYVISOR_OBJS) bin/uefi.lib
 	@mkdir -p $(@D)
 	@$(LD) $(TINYVISOR_LDFLAGS) -o $@ $^
 
-obj/tinyvisor/%.c.o: tinyvisor/src/%.c
+obj/tinyvisor/%.c.o: tinyvisor/%.c
 	@echo CC $@
 	@mkdir -p $(@D)
 	@$(CC) $(TINYVISOR_CFLAGS) -c -o $@ $<
 
-obj/tinyvisor/%.S.o: tinyvisor/src/%.S
+obj/tinyvisor/%.S.o: tinyvisor/%.S
 	@echo CC $@
 	@mkdir -p $(@D)
 	@$(CC) $(TINYVISOR_SFLAGS) -c -o $@ $<
 
-obj/uefi/%.c.o: uefi/src/%.c
+obj/uefi/%.c.o: uefi/%.c
 	@echo CC $@
 	@mkdir -p $(@D)
 	@$(CC) $(UEFILIB_CFLAGS) -c -o $@ $<
