@@ -4,6 +4,7 @@
 #include "Interrupts.h"
 #include "Events.h"
 #include "Paging.h"
+#include "Mtrrs.h"
 #include "Log.h"
 #include "Vmx.h"
 #include "Mp.h"
@@ -22,6 +23,8 @@ EFI_STATUS TinyvisorEntryPoint(EFI_HANDLE Handle, EFI_SYSTEM_TABLE* SystemTable)
     InitializeHostPageTables();
     LOG("Initializing host IDT...");
     InitializeHostIdt();
+    LOG("Initializing MTRRs...");
+    InitializeMtrrs();
     LOG("Checking if VMX can be used...");
     EFI_CHECK(IsVmxAvailable());
     LOG("Initialized!");
