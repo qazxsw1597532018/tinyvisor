@@ -9,7 +9,7 @@
 #include "Vmx.h"
 #include "Mp.h"
 
-EFI_STATUS TinyvisorEntryPoint(EFI_HANDLE Handle, EFI_SYSTEM_TABLE* SystemTable) {
+EFI_STATUS EfiMain(EFI_HANDLE Handle, EFI_SYSTEM_TABLE* SystemTable) {
     EFI_STATUS Status = EFI_SUCCESS;
     SetImageParameters(Handle, SystemTable);
     EFI_CHECK(InitializeLogging());

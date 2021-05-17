@@ -32,7 +32,7 @@ TINYVISOR_CFLAGS := \
 TINYVISOR_LDFLAGS := \
 	-target x86_64-unknown-windows \
 	-nostdlib \
-    -Wl,-entry:TinyvisorEntryPoint \
+    -Wl,-entry:EfiMain \
     -Wl,-subsystem:efi_runtime_driver \
     -Wl,-debug \
     -fuse-ld=lld-link \
