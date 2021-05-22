@@ -43,13 +43,45 @@ VOID InitializeMtrrInfo() {
         .Packed = __readmsr(MSR_IA32_MTRR_CAPABILITIES)
     };
 
+    UINT32 CurrentIndex = 0;
+
+    // This is used for combining contiguous memory ranges with the same memory type
+    MTRR_RANGE CurrentRange;
+    memset(&CurrentRange, 0, sizeof(CurrentRange));
+    CurrentRange.Type = MEMORY_TYPE_INVALID;
+
+    gMtrrInfo.DefaultMemoryType = (IA32_MEMORY_TYPE)DefaultMemoryTypeRegister.DefaultMemoryType;
+
+    // Handle fixed MTRRs (if they are supported and enabled)
     if (MtrrCapabilitiesRegister.FixedRangeSupported && DefaultMemoryTypeRegister.FixedRangeMtrrEnable) {
         for (UINT32 i = 0; i < COUNT_OF(FIXED_MTRR_RANGE_INFO); i++) {
             IA32_MTRR_FIXED_RANGE_REGISTER FixedRange = {
                 .Packed = __readmsr(FIXED_MTRR_RANGE_INFO[i].Msr)
             };
 
-            // TODO: Finish implementation
+            for (UINT32 j = 0; j < COUNT_OF(FixedRange.Types); j++) {
+                EFI_PHYSICAL_ADDRESS Base = FIXED_MTRR_RANGE_INFO[i].Base + (FIXED_MTRR_RANGE_INFO[i].Size * j);
+
+                if (CurrentRange.Type == FixedRange.Types[j] && CurrentRange.End == Base) {
+                    // This range is contiguous with CurrentRange, combine them by extending CurrentRange's end
+                    CurrentRange.End += FIXED_MTRR_RANGE_INFO[i].Size;
+                } else {
+                    if (CurrentRange.Type != MEMORY_TYPE_INVALID) {
+                        gMtrrInfo.Ranges[CurrentIndex] = CurrentRange;
+                        CurrentIndex++;
+                    }
+
+                    CurrentRange.Fixed = TRUE;
+                    CurrentRange.Type = FixedRange.Types[j];
+                    CurrentRange.Base = Base;
+                    CurrentRange.End = FIXED_MTRR_RANGE_INFO[i].Size;
+                }
+            }
         }
+    }
+
+    // Handle all the other MTRRs
+    for (UINT32 i = 0; i < MtrrCapabilitiesRegister.VariableRangeCount; i++) {
+
     }
 }

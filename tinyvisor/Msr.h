@@ -159,4 +159,16 @@ typedef union _IA32_MTRR_FIXED_RANGE_REGISTER {
     UINT64 Packed;
 } IA32_MTRR_FIXED_RANGE_REGISTER;
 
+typedef union _IA32_MTRR_PHYSMASK_MSR {
+    struct {
+        UINT64 Type                                                    : 8;
+        UINT64 Reserved1                                               : 3;
+        UINT64 Valid                                                   : 1;
+        UINT64 PageFrameNumber                                         : 36;
+        UINT64 Reserved2                                               : 16;
+    };
+
+    UINT64 Packed;
+} IA32_MTRR_PHYSMASK_MSR;
+
 #endif // _TINYVISOR_MSR_H
