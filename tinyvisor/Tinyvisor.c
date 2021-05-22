@@ -23,8 +23,8 @@ EFI_STATUS EfiMain(EFI_HANDLE Handle, EFI_SYSTEM_TABLE* SystemTable) {
     InitializeHostPageTables();
     LOG("Initializing host IDT...");
     InitializeHostIdt();
-    LOG("Initializing MTRRs...");
-    InitializeMtrrs();
+    LOG("Initializing MTRR info...");
+    InitializeMtrrInfo();
     LOG("Checking if VMX can be used...");
     EFI_CHECK(IsVmxAvailable());
     LOG("Initialized!");
