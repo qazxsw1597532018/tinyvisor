@@ -82,6 +82,6 @@ VOID InitializeMtrrInfo() {
 
     // Handle all the other MTRRs
     for (UINT32 i = 0; i < MtrrCapabilitiesRegister.VariableRangeCount; i++) {
-
+        
     }
 }
