@@ -90,22 +90,22 @@ static __inline __attribute__((always_inline)) void __cpu_pause() {
     __asm__ __volatile__ ("pause");
 }
 
-static __inline__ __attribute__((always_inline)) void __lock_cmp_xchgw(volatile UINT16* Value, UINT16 CompareValue,
-                                                                       UINT16 ExchangeValue) {
+static __inline__ __attribute__((always_inline)) void __lock_cmp_xchgw(volatile unsigned __int16* Value, unsigned __int16 CompareValue,
+                                                                       unsigned __int16 ExchangeValue) {
     __asm__ __volatile__ ("lock cmpxchgw %2, %1" : "+a"(CompareValue), "+m"(*Value) : "q"(ExchangeValue) : "memory",
             "cc");
 }
 
-static __inline__ __attribute__((always_inline)) void __lock_cmp_xchgl(volatile UINT32* Value, UINT32 CompareValue,
-                                                                       UINT32 ExchangeValue) {
+static __inline__ __attribute__((always_inline)) void __lock_cmp_xchgl(volatile unsigned __int32* Value, unsigned __int32 CompareValue,
+                                                                       unsigned __int32 ExchangeValue) {
     __asm__ __volatile__ ("lock cmpxchgl %2, %1" : "+a"(CompareValue), "+m"(*Value) : "q"(ExchangeValue) : "memory",
             "cc");
 }
 
-static __inline__ __attribute__((always_inline)) void __lock_cmp_xchg8b(volatile UINT64* Value, UINT64 CompareValue,
-                                                                        UINT64 ExchangeValue) {
-    __asm__ __volatile__ ("lock cmpxchg8b (%1)" : "+A"(CompareValue) : "S"(Value), "b"((UINT32)ExchangeValue),
-            "c"((UINT32)(ExchangeValue >> 32)) : "memory", "cc");
+static __inline__ __attribute__((always_inline)) void __lock_cmp_xchg8b(volatile unsigned __int64* Value, unsigned __int64 CompareValue,
+                                                                        unsigned __int64 ExchangeValue) {
+    __asm__ __volatile__ ("lock cmpxchg8b (%1)" : "+A"(CompareValue) : "S"(Value), "b"((unsigned __int32)ExchangeValue),
+            "c"((unsigned __int32)(ExchangeValue >> 32)) : "memory", "cc");
 }
 
 #endif // _TINYVISOR_INTRINSICS_H

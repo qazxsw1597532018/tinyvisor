@@ -193,7 +193,7 @@ typedef union _IA32_MTRR_PHYSMASK_MSR {
     UINT64 Packed;
 } IA32_MTRR_PHYSMASK_MSR;
 
-typedef union _IA32_MTRR_PHYSBASE_REGISTER {
+typedef union _IA32_MTRR_PHYSBASE_MSR {
     struct {
         UINT64 Type                                                    : 8;
         UINT64 Reserved1                                               : 4;
@@ -202,6 +202,6 @@ typedef union _IA32_MTRR_PHYSBASE_REGISTER {
     };
     
     UINT64 Packed;
-} IA32_MTRR_PHYSBASE_REGISTER;
+} IA32_MTRR_PHYSBASE_MSR;
 
 #endif // _TINYVISOR_MSR_H

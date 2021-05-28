@@ -19,6 +19,7 @@ COMMON_CFLAGS := \
     -Wall \
     -Werror \
     -O1 \
+	-mlzcnt \
     -flto
 
 UEFILIB_CFLAGS := \

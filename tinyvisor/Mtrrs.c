@@ -49,7 +49,6 @@ VOID InitializeMtrrInfo() {
     MTRR_RANGE CurrentRange;
     memset(&CurrentRange, 0, sizeof(CurrentRange));
     CurrentRange.Type = MEMORY_TYPE_INVALID;
-
     gMtrrInfo.DefaultMemoryType = (IA32_MEMORY_TYPE)DefaultMemoryTypeRegister.DefaultMemoryType;
 
     // Handle fixed MTRRs (if they are supported and enabled)
@@ -74,7 +73,7 @@ VOID InitializeMtrrInfo() {
                     CurrentRange.Fixed = TRUE;
                     CurrentRange.Type = FixedRange.Types[j];
                     CurrentRange.Base = Base;
-                    CurrentRange.End = FIXED_MTRR_RANGE_INFO[i].Size;
+                    CurrentRange.End = Base + FIXED_MTRR_RANGE_INFO[i].Size;
                 }
             }
         }
@@ -82,6 +81,38 @@ VOID InitializeMtrrInfo() {
 
     // Handle all the other MTRRs
     for (UINT32 i = 0; i < MtrrCapabilitiesRegister.VariableRangeCount; i++) {
-        
+        IA32_MSR_ADDRESS MaskMsrAddress = MSR_IA32_MTRR_PHYSMASK0 + (i * 2);
+        IA32_MTRR_PHYSMASK_MSR MaskMsr = {
+            .Packed = __readmsr(MaskMsrAddress)
+        };
+
+        if (!MaskMsr.Valid) {
+            continue;
+        }
+
+        IA32_MSR_ADDRESS BaseMsrAddress = MSR_IA32_MTRR_PHYSBASE0 + (i * 2);
+        IA32_MTRR_PHYSBASE_MSR BaseMsr = {
+            .Packed = __readmsr(BaseMsrAddress)
+        };
+
+        EFI_PHYSICAL_ADDRESS Base = BaseMsr.PageFrameNumber << EFI_PAGE_SHIFT;
+        UINT64 RangeSizeInPages = (1 << __builtin_ia32_lzcnt_u64(MaskMsr.PageFrameNumber)) << EFI_PAGE_SHIFT;
+        if (!CurrentRange.Fixed && CurrentRange.Type == (IA32_MEMORY_TYPE)BaseMsr.Type && CurrentRange.End == Base) {
+            CurrentRange.End += RangeSizeInPages;
+        } else {
+            if (CurrentRange.Type != MEMORY_TYPE_INVALID) {
+                gMtrrInfo.Ranges[CurrentIndex] = CurrentRange;
+                CurrentIndex++;
+            }
+
+            CurrentRange.Fixed = FALSE;
+            CurrentRange.Type = (IA32_MEMORY_TYPE)BaseMsr.Type;
+            CurrentRange.Base = Base;
+            CurrentRange.End = Base + RangeSizeInPages;
+        }
+    }
+
+    if (CurrentRange.Type != MEMORY_TYPE_INVALID) {
+        gMtrrInfo.Ranges[CurrentIndex] = CurrentRange;
     }
 }
