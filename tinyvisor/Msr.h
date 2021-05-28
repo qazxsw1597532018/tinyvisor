@@ -50,6 +50,17 @@ typedef UINT32 IA32_MSR_ADDRESS;
 #define MSR_IA32_MTRR_PHYSMASK8 0x211
 #define MSR_IA32_MTRR_PHYSMASK9 0x213
 
+#define MSR_IA32_MTRR_PHYSBASE0 0x200
+#define MSR_IA32_MTRR_PHYSBASE1 0x202
+#define MSR_IA32_MTRR_PHYSBASE2 0x204
+#define MSR_IA32_MTRR_PHYSBASE3 0x206
+#define MSR_IA32_MTRR_PHYSBASE4 0x208
+#define MSR_IA32_MTRR_PHYSBASE5 0x20a
+#define MSR_IA32_MTRR_PHYSBASE6 0x20c
+#define MSR_IA32_MTRR_PHYSBASE7 0x20e
+#define MSR_IA32_MTRR_PHYSBASE8 0x210
+#define MSR_IA32_MTRR_PHYSBASE9 0x212
+
 typedef union _IA32_FEATURE_CONTROL_MSR {
     struct {
         UINT64 Lock : 1;
@@ -181,5 +192,16 @@ typedef union _IA32_MTRR_PHYSMASK_MSR {
 
     UINT64 Packed;
 } IA32_MTRR_PHYSMASK_MSR;
+
+typedef union _IA32_MTRR_PHYSBASE_REGISTER {
+    struct {
+        UINT64 Type                                                    : 8;
+        UINT64 Reserved1                                               : 4;
+        UINT64 PageFrameNumber                                         : 36;
+        UINT64 Reserved2                                               : 16;
+    };
+    
+    UINT64 Packed;
+} IA32_MTRR_PHYSBASE_REGISTER;
 
 #endif // _TINYVISOR_MSR_H
