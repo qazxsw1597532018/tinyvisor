@@ -6,6 +6,7 @@
 #include "Paging.h"
 #include "Mtrr.h"
 #include "Log.h"
+#include "Vmm.h"
 #include "Vmx.h"
 #include "Mp.h"
 
@@ -27,6 +28,8 @@ EFI_STATUS EfiMain(EFI_HANDLE Handle, EFI_SYSTEM_TABLE* SystemTable) {
     InitializeMtrrInfo();
     LOG("Checking if VMX can be used...");
     EFI_CHECK(IsVmxAvailable());
+    LOG("Initializing VMM...");
+    EFI_CHECK(EnableVmmOnAllProcessors());
     LOG("Initialized!");
 
 Cleanup:
