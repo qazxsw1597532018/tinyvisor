@@ -4,7 +4,7 @@
 #include "Interrupts.h"
 #include "Events.h"
 #include "Paging.h"
-#include "Mtrrs.h"
+#include "Mtrr.h"
 #include "Log.h"
 #include "Vmx.h"
 #include "Mp.h"
