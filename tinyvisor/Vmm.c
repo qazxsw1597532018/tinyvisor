@@ -2,6 +2,10 @@
 #include "Mp.h"
 #include "MemoryManager.h"
 
+EFI_STATUS EnableVmmOnSingleProcessor() {
+    return EFI_SUCCESS;
+}
+
 EFI_STATUS EnableVmmOnAllProcessors() {
     EFI_STATUS Status = EFI_SUCCESS;
     UINTN ProcessorCount = 0;
